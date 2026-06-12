@@ -24,7 +24,7 @@ smtpd_tls_loglevel = 1
 # --- SASL auth via Dovecot (used by the submission listener in master.cf) -
 smtpd_sasl_type = dovecot
 smtpd_sasl_path = inet:dovecot:12345
-smtpd_sasl_auth_enable = no
+smtpd_sasl_auth_enable = yes
 
 # --- Anti-abuse on port 25 -------------------------------------------------
 postscreen_greet_action = enforce
