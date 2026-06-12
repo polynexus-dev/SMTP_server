@@ -15,6 +15,17 @@ from mail.smtp import build_message, send
 def _mailbox_or_404(request):
     mb = request.user.mailboxes.filter(active=True).first()
     if mb is None:
+        from accounts.models import Mailbox
+        # Fallback 1: If username contains '@', look up mailbox by exact address
+        if "@" in request.user.username:
+            local, dom = request.user.username.rsplit("@", 1)
+            mb = Mailbox.objects.filter(local_part=local.lower().strip(), domain__name=dom.lower().strip(), active=True).first()
+        
+        # Fallback 2: Look up mailbox where local_part matches the username (e.g. 'admin' matches 'admin@polynexus.in')
+        if mb is None:
+            mb = Mailbox.objects.filter(local_part=request.user.username.lower().strip(), active=True).first()
+            
+    if mb is None:
         if request.user.is_staff:
             return None
         raise Http404("No mailbox is attached to this account.")
