@@ -87,6 +87,21 @@ def compose(request):
             attachments=attachments,
         )
         send(msg)
+        
+        # Save a copy to the Sent folder on the IMAP server and trigger index
+        try:
+            with open_mailbox(mb.address, "INBOX") as imap:
+                if not imap.folder.exists("Sent"):
+                    imap.folder.create("Sent")
+            with open_mailbox(mb.address, "Sent") as imap:
+                imap.append(msg.as_bytes(), "Sent")
+            
+            # Sync the Sent folder immediately in the database
+            from mail.tasks import index_mailbox
+            index_mailbox.run(None, mb.id, "Sent")
+        except Exception:
+            pass
+
         flash.success(request, "Message sent.")
         return redirect("inbox")
     return render(request, "webmail/compose.html", {

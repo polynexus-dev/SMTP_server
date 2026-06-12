@@ -40,3 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutForm.addEventListener('submit', ajaxLogout);
   }
 });
+
+// Refresh mailbox listing function
+function refreshMailbox(btn) {
+  if (btn) {
+    btn.classList.add('spinning');
+  }
+  setTimeout(() => {
+    window.location.reload();
+  }, 400);
+}
+

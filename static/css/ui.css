@@ -1069,3 +1069,31 @@ body {
   color: hsl(4, 90%, 45%);
 }
 
+/* Refresh Button and Animation */
+.refresh-btn {
+  margin-left: 0.75rem;
+  width: 36px !important;
+  height: 36px !important;
+  font-size: 1.25rem !important;
+  color: var(--color-text-muted) !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.refresh-btn:hover {
+  background-color: var(--color-border) !important;
+  color: var(--color-text-main) !important;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.refresh-btn.spinning i {
+  display: inline-block;
+  animation: spin 0.8s linear infinite;
+}
+
+
