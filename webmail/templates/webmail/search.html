@@ -1,0 +1,22 @@
+{% extends "webmail/base.html" %}
+{% block title %}Search{% endblock %}
+{% block content %}
+<h1>Search</h1>
+<form method="get" style="max-width:32rem;display:flex;gap:.5rem">
+  <input name="q" value="{{ q }}" placeholder="Subject, sender or text…" autofocus>
+  <button class="btn" type="submit">Search</button>
+</form>
+{% if q %}
+  {% if results %}
+  <ul class="msg-list" style="margin-top:1rem">
+    {% for m in results %}
+    <li><a href="{% url 'message' m.folder m.uid %}">
+      <span class="from">{{ m.from_addr }}</span>
+      <span class="subject">{{ m.subject|default:"(no subject)" }}</span>
+      <time>{{ m.date|date:"j M Y" }}</time>
+    </a></li>
+    {% endfor %}
+  </ul>
+  {% else %}<p class="empty">No messages match “{{ q }}”.</p>{% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "webmail/base.html" %}
+{% block title %}Compose{% endblock %}
+{% block content %}
+<h1>New message</h1>
+<form method="post" enctype="multipart/form-data" style="max-width:42rem">
+  {% csrf_token %}
+  <div class="row"><label>From <input value="{{ mailbox.address }}" disabled class="mono"></label></div>
+  <div class="row"><label>To <input name="to" value="{{ to }}" required
+       placeholder="one@example.com, two@example.com"></label></div>
+  <div class="row"><label>Subject <input name="subject" value="{{ subject }}"></label></div>
+  <div class="row"><label>Message <textarea name="body" rows="12"></textarea></label></div>
+  <div class="row"><label>Attachments <input type="file" name="attachments" multiple></label></div>
+  <button class="btn" type="submit">Send</button>
+</form>
+{% endblock %}

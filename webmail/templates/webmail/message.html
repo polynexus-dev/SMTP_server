@@ -1,0 +1,24 @@
+{% extends "webmail/base.html" %}
+{% block title %}{{ msg.subject|default:"(no subject)" }}{% endblock %}
+{% block content %}
+<p><a href="{% url 'inbox' %}">← back to {{ folder }}</a></p>
+<h1>{{ msg.subject|default:"(no subject)" }}</h1>
+<p class="mono">
+  From {{ msg.from_ }}<br>
+  To&nbsp;&nbsp; {{ msg.to|join:", " }}<br>
+  {{ msg.date|date:"r" }}
+</p>
+<pre class="body">{{ body }}</pre>
+{% if msg.attachments %}
+<h2>Attachments</h2>
+<ul>{% for a in msg.attachments %}
+  <li class="mono">{{ a.filename }} <span class="size">({{ a.size }} bytes)</span></li>
+{% endfor %}</ul>
+{% endif %}
+<p>
+  <a class="btn secondary" href="{% url 'compose' %}?to={{ msg.from_|urlencode }}&subject=Re:%20{{ msg.subject|urlencode }}">Reply</a>
+  <form method="post" action="{% url 'message_delete' folder msg.uid %}" style="display:inline">
+    {% csrf_token %}<button class="btn danger" type="submit">Delete</button>
+  </form>
+</p>
+{% endblock %}

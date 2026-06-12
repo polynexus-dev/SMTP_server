@@ -1,0 +1,27 @@
+{% extends "webmail/base.html" %}
+{% block title %}{{ folder }}{% endblock %}
+{% block content %}
+<h1>{{ folder }}</h1>
+{% if page.object_list %}
+<ul class="msg-list">
+  {% for m in page %}
+  <li>
+    <a href="{% url 'message' folder m.uid %}" class="{% if not m.seen %}unread{% endif %}">
+      <span class="from">{{ m.from_addr }}</span>
+      <span class="subject">{{ m.subject|default:"(no subject)" }}
+        <span class="snippet">— {{ m.snippet|truncatechars:80 }}</span></span>
+      <time datetime="{{ m.date|date:'c' }}">{{ m.date|date:"j M H:i" }}</time>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+<p class="mono">
+  {% if page.has_previous %}<a href="?page={{ page.previous_page_number }}">newer</a>{% endif %}
+  page {{ page.number }} / {{ page.paginator.num_pages }}
+  {% if page.has_next %}<a href="?page={{ page.next_page_number }}">older</a>{% endif %}
+</p>
+{% else %}
+<p class="empty">Nothing here yet. New mail appears within a few minutes of delivery —
+send yourself a test message to start.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,86 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Mail{% endblock %} · MailStack</title>
+<style>
+  /* Identity: ink on paper with an airmail-stripe signature. Metadata is set in
+     mono — the vernacular of mail headers — body chrome stays quiet. */
+  :root{
+    --ink:#16181d; --paper:#fdfdfb; --muted:#6b7280; --line:#e5e3dc;
+    --air-blue:#2243b6; --post-red:#d92d2a; --unread:#f4f6ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+       font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+  .stripe{height:6px;background:repeating-linear-gradient(135deg,
+       var(--post-red) 0 14px, var(--paper) 14px 22px, var(--air-blue) 22px 36px,
+       var(--paper) 36px 44px)}
+  header{display:flex;gap:1.25rem;align-items:baseline;padding:.9rem 1.25rem;
+         border-bottom:1px solid var(--line)}
+  header .brand{font-weight:700;letter-spacing:.04em}
+  header .addr{color:var(--muted)}
+  .mono, header .addr, time, .size{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+         font-size:.84rem;color:var(--muted)}
+  nav a, header a{color:var(--air-blue);text-decoration:none}
+  nav a:hover, header a:hover{text-decoration:underline}
+  main{max-width:60rem;margin:0 auto;padding:1.25rem}
+  .btn{display:inline-block;border:1px solid var(--ink);background:var(--ink);
+       color:var(--paper);padding:.45rem .9rem;border-radius:3px;cursor:pointer;
+       font:inherit}
+  .btn.secondary{background:transparent;color:var(--ink)}
+  .btn.danger{border-color:var(--post-red);background:var(--post-red)}
+  .btn:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible{
+       outline:2px solid var(--air-blue);outline-offset:2px}
+  input,textarea{width:100%;padding:.5rem .6rem;border:1px solid var(--line);
+       border-radius:3px;font:inherit;background:#fff}
+  .flash{padding:.6rem .9rem;border:1px solid var(--line);border-left:3px solid var(--air-blue);
+       margin-bottom:1rem;background:#fff}
+  .msg-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+  .msg-list li{border-bottom:1px solid var(--line)}
+  .msg-list a{display:grid;grid-template-columns:14rem 1fr 7rem;gap:1rem;
+       padding:.6rem .4rem;color:inherit;text-decoration:none;align-items:baseline}
+  .msg-list a:hover{background:#f7f6f2}
+  .msg-list .unread{background:var(--unread);font-weight:600}
+  .msg-list .from{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .msg-list .subject{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .msg-list .subject .snippet{color:var(--muted);font-weight:400}
+  .msg-list time{text-align:right}
+  .empty{color:var(--muted);padding:3rem 0;text-align:center}
+  pre.body{white-space:pre-wrap;font:inherit;border:1px solid var(--line);
+       background:#fff;padding:1rem;border-radius:3px}
+  form .row{margin-bottom:.8rem}
+  @media (max-width:640px){
+    .msg-list a{grid-template-columns:1fr 5rem}
+    .msg-list .from{display:none}
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .msg-list a{transition:background .12s ease}
+  }
+</style>
+</head>
+<body>
+<div class="stripe" role="presentation"></div>
+<header>
+  <span class="brand">✉ MailStack</span>
+  {% if user.is_authenticated %}
+    <nav>
+      <a href="{% url 'inbox' %}">Inbox</a> ·
+      <a href="{% url 'compose' %}">Compose</a> ·
+      <a href="{% url 'search' %}">Search</a>
+    </nav>
+    <span style="flex:1"></span>
+    <span class="addr">{{ mailbox.address|default:user.username }}</span>
+    <form method="post" action="{% url 'logout' %}" style="display:inline">
+      {% csrf_token %}<button class="btn secondary" type="submit">Sign out</button>
+    </form>
+  {% endif %}
+</header>
+<main>
+  {% for f in messages %}<div class="flash">{{ f }}</div>{% endfor %}
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>
