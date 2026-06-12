@@ -15,6 +15,8 @@ from mail.smtp import build_message, send
 def _mailbox_or_404(request):
     mb = request.user.mailboxes.filter(active=True).first()
     if mb is None:
+        if request.user.is_staff:
+            return None
         raise Http404("No mailbox is attached to this account.")
     return mb
 
@@ -22,6 +24,8 @@ def _mailbox_or_404(request):
 @login_required
 def inbox(request, folder: str = "INBOX"):
     mb = _mailbox_or_404(request)
+    if mb is None:
+        return redirect("admin_panel:email_list")
 
     # Sync new mail from Dovecot on inbox load / refresh
     from mail.tasks import index_mailbox
@@ -39,6 +43,8 @@ def inbox(request, folder: str = "INBOX"):
 @login_required
 def message_detail(request, folder: str, uid: int):
     mb = _mailbox_or_404(request)
+    if mb is None:
+        return redirect("admin_panel:email_list")
     try:
         with open_mailbox(mb.address, folder) as imap:
             msg = next(iter(imap.fetch(f"UID {uid}", mark_seen=True)), None)
@@ -60,6 +66,8 @@ def message_detail(request, folder: str, uid: int):
 @require_POST
 def message_delete(request, folder: str, uid: int):
     mb = _mailbox_or_404(request)
+    if mb is None:
+        return redirect("admin_panel:email_list")
     with open_mailbox(mb.address, folder) as imap:
         imap.delete([str(uid)])
     MessageMeta.objects.filter(mailbox=mb, folder=folder, uid=uid).delete()
@@ -70,6 +78,9 @@ def message_delete(request, folder: str, uid: int):
 @login_required
 def compose(request):
     mb = _mailbox_or_404(request)
+    if mb is None:
+        flash.info(request, "Please create a mailbox first to send emails.")
+        return redirect("admin_panel:mailbox_list")
     if request.method == "POST":
         to = [a.strip() for a in request.POST.get("to", "").split(",") if a.strip()]
         if not to:
@@ -114,6 +125,8 @@ def compose(request):
 @login_required
 def search(request):
     mb = _mailbox_or_404(request)
+    if mb is None:
+        return redirect("admin_panel:email_list")
     q = request.GET.get("q", "").strip()
     results = MessageMeta.objects.none()
     if q:
