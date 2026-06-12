@@ -95,7 +95,7 @@ CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 CELERY_BEAT_SCHEDULE = {
     "index-all-mailboxes": {
         "task": "mail.tasks.index_all_mailboxes",
-        "schedule": 30.0,  # every 30 seconds
+        "schedule": 5.0,  # every 30 seconds
     },
 }
 
