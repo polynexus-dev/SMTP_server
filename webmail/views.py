@@ -21,6 +21,11 @@ def _mailbox_or_404(request):
             local, dom = request.user.username.rsplit("@", 1)
             mb = Mailbox.objects.filter(local_part=local.lower().strip(), domain__name=dom.lower().strip(), active=True).first()
         
+        # Fallback 1.5: If user's email field contains '@', look up mailbox by exact address
+        if mb is None and getattr(request.user, "email", None) and "@" in request.user.email:
+            local, dom = request.user.email.rsplit("@", 1)
+            mb = Mailbox.objects.filter(local_part=local.lower().strip(), domain__name=dom.lower().strip(), active=True).first()
+        
         # Fallback 2: Look up mailbox where local_part matches the username (e.g. 'admin' matches 'admin@polynexus.in')
         if mb is None:
             mb = Mailbox.objects.filter(local_part=request.user.username.lower().strip(), active=True).first()

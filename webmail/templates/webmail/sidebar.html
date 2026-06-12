@@ -1,7 +1,11 @@
 {% load static %}
 {% if request.resolver_match.namespace == 'admin_panel' %}
   <!-- Admin Panel Sidebar -->
-  <div class="sidebar-compose-container">
+  <div class="sidebar-compose-container" style="display: flex; flex-direction: column; gap: 0.75rem;">
+    <a href="{% url 'compose' %}" class="btn-compose">
+      <i class="bi bi-pencil-square"></i>
+      <span>Compose</span>
+    </a>
     <a href="{% url 'inbox' %}" class="btn-compose" style="background-color: var(--color-primary-soft); color: var(--color-primary); width: 100%; justify-content: center; box-shadow: none; border: 1px solid var(--color-primary);">
       <i class="bi bi-arrow-left"></i>
       <span>Back to Webmail</span>
