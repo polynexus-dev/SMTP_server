@@ -1,0 +1,37 @@
+{% extends "webmail/base.html" %}
+{% block title %}Admin – Emails{% endblock %}
+{% block content %}
+<h1>All Emails</h1>
+<table style="width:100%; border-collapse:collapse;">
+  <thead>
+    <tr style="background:#f0f0f0;">
+      <th style="padding:8px; text-align:left;">ID</th>
+      <th style="padding:8px; text-align:left;">Subject</th>
+      <th style="padding:8px; text-align:left;">From</th>
+      <th style="padding:8px; text-align:left;">Date</th>
+      <th style="padding:8px; text-align:left;">Folder</th>
+      <th style="padding:8px; text-align:left;">Seen</th>
+      <th style="padding:8px; text-align:left;">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for email in page.object_list %}
+    <tr style="border-top:1px solid #e0e0e0;">
+      <td style="padding:8px;">{{ email.id }}</td>
+      <td style="padding:8px;">{{ email.subject|default:"(no subject)"|truncatechars:50 }}</td>
+      <td style="padding:8px;">{{ email.from_addr }}</td>
+      <td style="padding:8px;">{{ email.date|date:"Y-m-d H:i" }}</td>
+      <td style="padding:8px;">{{ email.folder }}</td>
+      <td style="padding:8px;">{{ email.seen }}</td>
+      <td style="padding:8px;">
+        <a href="{% url 'admin_panel:email_detail' email.id %}">View</a> |
+        <a href="{% url 'admin_panel:email_delete' email.id %}" onclick="return confirm('Delete this email?');">Delete</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="7" style="padding:8px; text-align:center;">No emails found.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div style="margin-top:1rem;">{% if page.has_previous %}<a href="?page={{ page.previous_page_number }}">← Prev</a>{% endif %} Page {{ page.number }} of {{ page.paginator.num_pages }} {% if page.has_next %}<a href="?page={{ page.next_page_number }}">Next →</a>{% endif %}</div>
+{% endblock %}

@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "mail",
     "webmail",
     "api",
+    "admin_panel",
 ]
 
 MIDDLEWARE = [
@@ -78,6 +79,7 @@ STORAGES = {"staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestSta
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "inbox"
+LOGOUT_REDIRECT_URL = "login"
 
 # --- Mail plumbing -------------------------------------------------------
 IMAP_HOST = os.environ.get("IMAP_HOST", "dovecot")

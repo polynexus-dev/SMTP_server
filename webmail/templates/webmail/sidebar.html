@@ -1,0 +1,10 @@
+{% load static %}
+<ul class="sidebar-list">
+  <li><a href="{% url 'inbox' %}" class="{% if request.resolver_match.url_name == 'inbox' %}active{% endif %}">Inbox</a></li>
+  <li><a href="{% url 'folder' folder='Sent' %}" class="{% if request.resolver_match.kwargs.folder == 'Sent' %}active{% endif %}">Sent</a></li>
+  <li><a href="{% url 'folder' folder='Drafts' %}" class="{% if request.resolver_match.kwargs.folder == 'Drafts' %}active{% endif %}">Drafts</a></li>
+  <li><a href="{% url 'folder' folder='Spam' %}" class="{% if request.resolver_match.kwargs.folder == 'Spam' %}active{% endif %}">Spam</a></li>
+  <li><a href="{% url 'folder' folder='Notifications' %}" class="{% if request.resolver_match.kwargs.folder == 'Notifications' %}active{% endif %}">Notifications</a></li>
+  <li><a href="{% url 'folder' folder='Social' %}" class="{% if request.resolver_match.kwargs.folder == 'Social' %}active{% endif %}">Social</a></li>
+  <li><a href="{% url 'folder' folder='All' %}" class="{% if request.resolver_match.kwargs.folder == 'All' %}active{% endif %}">All Mail</a></li>
+</ul>
