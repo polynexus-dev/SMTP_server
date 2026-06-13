@@ -11,6 +11,9 @@ from mail.imap import ImapUnavailable, open_mailbox
 from mail.models import MessageMeta
 from mail.smtp import build_message, send
 
+from django.db.models import Max
+from django.utils import timezone
+from email.utils import parsedate_to_datetime
 
 def _mailbox_or_404(request):
     mb = request.user.mailboxes.filter(active=True).first()
@@ -135,9 +138,7 @@ def compose(request):
             # Fallback: create database record directly if mail server is offline/unavailable
             # so the "Sent" section shows the email locally.
             try:
-                from django.db.models import Max
-                from django.utils import timezone
-                from email.utils import parsedate_to_datetime
+             
                 
                 last_uid = MessageMeta.objects.filter(mailbox=mb, folder="Sent").aggregate(Max("uid"))["uid__max"] or 0
                 
