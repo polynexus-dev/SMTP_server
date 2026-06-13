@@ -33,10 +33,10 @@
 
 <div class="compose-card" style="border-bottom: 1px solid var(--color-border); padding-bottom: 2rem;">
   <h3 style="font-size: 1.1rem; margin-bottom: 1rem; font-weight: 600;">Create New Email Account (Mailbox)</h3>
-  <form method="post" action="{% url 'admin_panel:mailbox_create' %}" class="compose-form" style="max-width: 600px; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+  <form method="post" action="{% url 'admin_panel:mailbox_create' %}" class="admin-form-grid">
     {% csrf_token %}
     
-    <div class="form-group" style="grid-column: span 2;">
+    <div class="form-group full-width">
       <label for="id_address">Email Address</label>
       <input type="email" id="id_address" name="address" required placeholder="user@yourdomain.com" class="form-control">
     </div>
@@ -51,7 +51,7 @@
       <input type="number" id="id_quota" name="quota_mb" value="2048" required class="form-control">
     </div>
     
-    <div style="grid-column: span 2; margin-top: 0.5rem;">
+    <div class="full-width" style="margin-top: 0.5rem;">
       <button class="btn btn-primary btn-send" type="submit" style="padding: 0.65rem 1.25rem;">
         <i class="bi bi-person-plus"></i>
         <span>Create Account</span>

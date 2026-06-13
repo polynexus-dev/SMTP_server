@@ -2,9 +2,24 @@
 
 // Sidebar toggle for mobile
 function toggleSidebar() {
-  const sidebar = document.querySelector('.sidebar');
+  const sidebar = document.querySelector('.app-sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
   if (sidebar) {
     sidebar.classList.toggle('open');
+    if (backdrop) {
+      backdrop.classList.toggle('active');
+    }
+  }
+}
+
+function closeSidebar() {
+  const sidebar = document.querySelector('.app-sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if (sidebar) {
+    sidebar.classList.remove('open');
+  }
+  if (backdrop) {
+    backdrop.classList.remove('active');
   }
 }
 
@@ -34,6 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggleBtn = document.getElementById('sidebarToggle');
   if (toggleBtn) {
     toggleBtn.addEventListener('click', toggleSidebar);
+  }
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if (backdrop) {
+    backdrop.addEventListener('click', closeSidebar);
   }
   const logoutForm = document.getElementById('logoutForm');
   if (logoutForm) {

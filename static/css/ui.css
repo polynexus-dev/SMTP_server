@@ -917,6 +917,12 @@ body {
   align-items: stretch;
 }
 
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 1.5rem 1.25rem !important;
+  }
+}
+
 .auth-card-wrapper {
   display: flex;
   flex-direction: column;
@@ -997,6 +1003,39 @@ body {
   margin-top: 1rem;
 }
 
+/* Sidebar Backdrop Overlay */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.sidebar-backdrop.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Responsive Grid for Admin & Webmail Forms */
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  max-width: 650px;
+  width: 100%;
+}
+
+.admin-form-grid .form-group.full-width,
+.admin-form-grid .full-width {
+  grid-column: span 2;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .app-sidebar {
@@ -1016,7 +1055,155 @@ body {
   .header-search {
     display: none; /* Hide top search bar on small screens */
   }
+
+  .app-content-wrapper {
+    padding: 0.5rem !important;
+  }
+  
+  .app-content-card {
+    border-radius: var(--radius-md) !important;
+  }
+  
+  .content-header {
+    padding: 1rem !important;
+  }
+  
+  .folder-title h1 {
+    font-size: 1.15rem !important;
+  }
+
+  .mail-list-container {
+    padding: 0.75rem !important;
+  }
+
+  /* Header Optimization */
+  .header-left {
+    min-width: auto !important;
+  }
+  
+  .admin-badge-link span,
+  .btn-logout span,
+  .user-email-display span,
+  .btn-text {
+    display: none !important;
+  }
+  
+  .admin-badge-link,
+  .btn-logout,
+  .user-email-display {
+    padding: 0.5rem !important;
+    border-radius: 50% !important;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .admin-badge-link i,
+  .btn-logout i,
+  .user-email-display i {
+    font-size: 1.25rem !important;
+    margin: 0 !important;
+  }
+
+  /* Mail List Layout Stacking */
+  .mail-item-row {
+    padding: 0.75rem 1rem !important;
+    position: relative;
+  }
+  
+  .mail-item-link {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.35rem !important;
+  }
+  
+  .mail-from {
+    width: 100% !important;
+    font-size: 0.95rem !important;
+    padding-right: 4.5rem !important; /* Avoid overlap with the date */
+  }
+  
+  .mail-details {
+    width: 100% !important;
+    padding-right: 0 !important;
+    display: block !important;
+  }
+  
+  .mail-subject {
+    display: inline !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .mail-snippet {
+    display: inline !important;
+    font-size: 0.85rem !important;
+  }
+  
+  .mail-date {
+    position: absolute !important;
+    top: 0.75rem !important;
+    right: 1rem !important;
+    width: auto !important;
+    font-size: 0.8rem !important;
+    color: var(--color-text-muted) !important;
+  }
+
+  /* Message view adjustments */
+  .message-card {
+    padding: 1rem !important;
+  }
+  
+  .message-subject-line h1 {
+    font-size: 1.25rem !important;
+  }
+  
+  .sender-info-card {
+    gap: 0.75rem !important;
+  }
+  
+  .sender-avatar {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 1rem !important;
+  }
 }
+
+@media (max-width: 600px) {
+  .admin-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .admin-form-grid .form-group {
+    grid-column: span 1 !important;
+  }
+  .admin-form-grid div {
+    grid-column: span 1 !important;
+  }
+  
+  /* Stack compose view actions */
+  .compose-actions {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+  }
+  
+  .btn-send, .btn-cancel {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Stack search form */
+  .search-form-page {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+  
+  .search-form-page button {
+    width: 100%;
+  }
+}
+
 
 /* Admin Table & Utility Styles */
 .admin-table {

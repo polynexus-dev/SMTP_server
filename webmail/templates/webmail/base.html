@@ -57,6 +57,7 @@
 
 <div class="app-container {% if not user.is_authenticated %}auth-container-layout{% endif %}">
   {% if user.is_authenticated %}
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
   <aside class="app-sidebar">
     {% include "webmail/sidebar.html" %}
   </aside>

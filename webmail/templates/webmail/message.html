@@ -4,7 +4,7 @@
 <div class="message-view-header">
   <a href="{% url 'folder' folder=folder %}" class="btn-back">
     <i class="bi bi-arrow-left"></i>
-    <span>Back to {{ folder }}</span>
+    <span class="btn-text">Back to {{ folder }}</span>
   </a>
   
   <div class="message-actions-top">
@@ -12,12 +12,12 @@
       {% csrf_token %}
       <button class="btn-action-icon danger" type="submit" title="Delete message">
         <i class="bi bi-trash"></i>
-        <span>Delete</span>
+        <span class="btn-text">Delete</span>
       </button>
     </form>
     <a class="btn-action-icon primary" href="{% url 'compose' %}?to={{ msg.from_|urlencode }}&subject=Re:%20{{ msg.subject|urlencode }}" title="Reply to sender">
       <i class="bi bi-reply"></i>
-      <span>Reply</span>
+      <span class="btn-text">Reply</span>
     </a>
   </div>
 </div>

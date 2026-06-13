@@ -33,7 +33,7 @@
 
 <div class="compose-card" style="border-bottom: 1px solid var(--color-border); padding-bottom: 2rem;">
   <h3 style="font-size: 1.1rem; margin-bottom: 1rem; font-weight: 600;">Add New Domain</h3>
-  <form method="post" action="{% url 'admin_panel:domain_list' %}" class="compose-form" style="max-width: 600px; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+  <form method="post" action="{% url 'admin_panel:domain_list' %}" class="admin-form-grid">
     {% csrf_token %}
     
     <div class="form-group">
@@ -46,7 +46,7 @@
       <input type="text" id="id_dkim" name="dkim_selector" value="mail" required class="form-control">
     </div>
     
-    <div style="grid-column: span 2; margin-top: 0.5rem;">
+    <div class="full-width" style="margin-top: 0.5rem;">
       <button class="btn btn-primary btn-send" type="submit" style="padding: 0.65rem 1.25rem;">
         <i class="bi bi-plus-circle"></i>
         <span>Add Domain</span>
