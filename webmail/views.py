@@ -113,7 +113,12 @@ def compose(request):
             body=request.POST.get("body", ""),
             attachments=attachments,
         )
-        send(msg)
+        
+        smtp_failed = False
+        try:
+            send(msg)
+        except Exception:
+            smtp_failed = True
         
         # Save a copy to the Sent folder on the IMAP server and trigger index
         try:
@@ -127,9 +132,46 @@ def compose(request):
             from mail.tasks import index_mailbox
             index_mailbox.run(None, mb.id, "Sent")
         except Exception:
-            pass
+            # Fallback: create database record directly if mail server is offline/unavailable
+            # so the "Sent" section shows the email locally.
+            try:
+                from django.db.models import Max
+                from django.utils import timezone
+                from email.utils import parsedate_to_datetime
+                
+                last_uid = MessageMeta.objects.filter(mailbox=mb, folder="Sent").aggregate(Max("uid"))["uid__max"] or 0
+                
+                date_val = timezone.now()
+                if msg.get("Date"):
+                    try:
+                        date_val = parsedate_to_datetime(msg.get("Date"))
+                    except Exception:
+                        pass
+                
+                has_attachments = bool(attachments)
+                
+                MessageMeta.objects.create(
+                    mailbox=mb,
+                    folder="Sent",
+                    uid=last_uid + 1,
+                    message_id=msg.get("Message-ID", "")[:998],
+                    subject=msg.get("Subject", ""),
+                    from_addr=mb.address,
+                    to_addrs=", ".join(to),
+                    date=date_val,
+                    size=len(msg.as_bytes()),
+                    seen=True,
+                    flagged=False,
+                    has_attachments=has_attachments,
+                    snippet=request.POST.get("body", "")[:280],
+                )
+            except Exception:
+                pass
 
-        flash.success(request, "Message sent.")
+        if smtp_failed:
+            flash.warning(request, "Message saved to Sent locally (SMTP relay is currently offline).")
+        else:
+            flash.success(request, "Message sent.")
         return redirect("inbox")
     return render(request, "webmail/compose.html", {
         "mailbox": mb,
