@@ -905,7 +905,20 @@ body {
   width: 100%;
 }
 
+.auth-container-layout .app-content-wrapper {
+  background-color: transparent !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: visible !important;
+  width: 100% !important;
+  height: 100% !important;
+  flex: 1 1 auto !important;
+}
+
 .auth-card {
+  flex: none !important;
   width: 100%;
   max-width: 420px;
   background-color: var(--color-bg-card);
